@@ -93,7 +93,6 @@ class _LoginState extends State<Login> {
                             10.0) //                 <--- border radius here
                         )),
                 child: TextFormField(
-                    controller: _fullName,
                     validator: (value) {
                       if (value.isEmpty || value.length < 6) {
                         return 'invalid fullname';
@@ -132,7 +131,6 @@ class _LoginState extends State<Login> {
                       ),
                 ),
                 child: TextFormField(
-                    controller: _password,
                     validator: (value) {
                       if (value.isEmpty || value.length < 5) {
                         return 'invalid password';
@@ -212,7 +210,9 @@ class _LoginState extends State<Login> {
               ),
               child: TextFormField(
                   onChanged: (value) {
-                    _email.text = value;
+                    setState(() {
+                      _email.text = value;
+                    });
                   },
                   validator: (value) {
                     if (value.isEmpty || !value.contains('@')) {
@@ -221,7 +221,6 @@ class _LoginState extends State<Login> {
                       return null;
                     }
                   },
-                  controller: _email,
                   decoration: new InputDecoration(
                     labelText: 'Email',
                     fillColor: Colors.white,
@@ -236,9 +235,10 @@ class _LoginState extends State<Login> {
                     ),
               ),
               child: TextFormField(
-                  controller: _password,
                   onChanged: (value) {
-                    _password.text = value;
+                    setState(() {
+                      _password.text = value;
+                    });
                   },
                   validator: (value) {
                     if (value.isEmpty || value.length < 5) {
@@ -356,6 +356,8 @@ class _LoginState extends State<Login> {
 
   Future<void> _signInSubmit(BuildContext context) async {
     bool respons = false;
+    print(_email.text);
+    print(_password.text);
 
     await call.signInSubmit(_email.text, _password.text).then(((value) {
       Navigator.pushAndRemoveUntil(

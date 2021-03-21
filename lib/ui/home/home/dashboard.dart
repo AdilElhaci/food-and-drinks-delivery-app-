@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fooddeliveryapp/core/constants/asset-files-url.dart';
+import 'package:fooddeliveryapp/core/service/firebase_service/firebase_auth.dart';
+import 'package:fooddeliveryapp/ui/home/products/product_page.dart';
 import 'package:fooddeliveryapp/ui/home/search/search.dart';
 import 'package:kartal/kartal.dart';
 
@@ -9,6 +11,13 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  FirBaseServices call = FirBaseServices();
+  @override
+  void initState() {
+    super.initState();
+    call.getFoodList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +66,16 @@ class _DashBoardState extends State<DashBoard> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildStackOrder('assets/images/drinks.png', 'Drinks'),
+                        InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProductsPage()),
+                              );
+                            },
+                            child: buildStackOrder(
+                                'assets/images/drinks.png', 'Drinks')),
                         buildStackOrder(
                             'assets/images/fast-food.png', 'Fast Food'),
                       ],
@@ -115,7 +133,6 @@ class _DashBoardState extends State<DashBoard> {
               child: Container(
                 height: 150,
                 width: 100,
-                // image is square but we add extra 20 + 20 padding thats why width is 200
                 child: Image.asset(
                   url,
                   fit: BoxFit.contain,

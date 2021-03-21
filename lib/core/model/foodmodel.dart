@@ -4,7 +4,7 @@ class FoodModel {
   String id;
   String imgUrl;
   String name;
-  int price;
+  String price;
   String restaurantName;
 
   FoodModel(

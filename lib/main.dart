@@ -7,8 +7,6 @@ import 'package:fooddeliveryapp/ui/home/products/product_page.dart';
 import 'package:fooddeliveryapp/ui/home/profile/profile.dart';
 
 void main() {
-  //to do refernce
-
   runApp(MyApp());
 }
 
@@ -27,7 +25,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/profile': (context) => ProfilePage(),
         '/login': (context) => Login(),
-        '/': (context) => Login(),
+        '/': (context) => Home(),
         '/product': (context) => ProductsPage(),
         '/home': (context) => Home(),
         '/forgotpassword': (context) => ForgotPassword(),

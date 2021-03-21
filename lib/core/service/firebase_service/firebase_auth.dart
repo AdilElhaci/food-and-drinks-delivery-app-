@@ -2,12 +2,14 @@ import 'dart:collection';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fooddeliveryapp/core/model/foodmodel.dart';
 import 'package:fooddeliveryapp/core/model/user.dart';
 
 class FirBaseServices {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   UserModel userModel = UserModel();
-  final db = FirebaseDatabase.instance.reference().child("users");
+  final dbUser = FirebaseDatabase.instance.reference().child("users");
+  final dbFood = FirebaseDatabase.instance.reference().child("foods");
 
   Future<UserModel> signInSubmit(String email, String password) async {
     String uid;
@@ -30,7 +32,7 @@ class FirBaseServices {
   Future<UserModel> getUserData(String uid) async {
     UserModel user = UserModel();
     bool respons = false;
-    await db.once().then((DataSnapshot snapshot) {
+    await dbUser.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> values = snapshot.value;
       values.forEach((key, values) {
         if (uid == key) {
@@ -61,7 +63,10 @@ class FirBaseServices {
       createDoc['password'] = passowrd;
       createDoc['address'] = address;
 
-      await db.child(uid).update(createDoc).then((value) => {result = true});
+      await dbUser
+          .child(uid)
+          .update(createDoc)
+          .then((value) => {result = true});
     } catch (e) {
       print(e.toString());
     }
@@ -70,5 +75,29 @@ class FirBaseServices {
     } else {
       return false;
     }
+  }
+
+  Future<List<FoodModel>> getFoodList() async {
+    List<FoodModel> list = [];
+
+    await dbFood.once().then((DataSnapshot snapshot) {
+      var data = snapshot.value;
+
+      data.forEach((key, value) {
+        FoodModel food = new FoodModel();
+        food.category = value['category'];
+        food.content = value['content'];
+        food.id = value['id'];
+        food.imgUrl = value['img_url'];
+        food.name = value['name'];
+        food.price = value['price'];
+
+        food.restaurantName = value['restaurant_name'];
+
+        list.add(food);
+      });
+    });
+
+    return list;
   }
 }
