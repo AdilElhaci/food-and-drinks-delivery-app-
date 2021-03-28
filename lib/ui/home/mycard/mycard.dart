@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:fooddeliveryapp/core/model/user.dart';
+import 'package:fooddeliveryapp/core/service/firebase_service/firebase_auth.dart';
+import 'package:fooddeliveryapp/ui/home/home/home.dart';
 import 'package:kartal/kartal.dart';
 
 class MyCard extends StatefulWidget {
+  final bool v;
+
+  const MyCard({Key key, this.v}) : super(key: key);
   @override
   _MyCardState createState() => _MyCardState();
 }
 
 class _MyCardState extends State<MyCard> {
+  FirBaseServices call = FirBaseServices();
+  bool _state;
+  @override
+  void initState() {
+    super.initState();
+    _state = widget.v;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,6 +200,36 @@ class _MyCardState extends State<MyCard> {
                       ),
                     ),
                   ),
+                  _state == true
+                      ? SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: context.dynamicHeight(0.07),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Color(0xFFffffff)),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                  borderRadius: context.highBorderRadius,
+                                ))),
+                            onPressed: () async {
+                              UserModel user = await call.getUserData();
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Home(userModel: user)),
+                                  (route) => false);
+                            },
+                            child: Text(
+                              'go to home ',
+                              style: context.textTheme.headline5,
+                            ),
+                          ),
+                        )
+                      : Container(),
                 ],
               ))
         ])));

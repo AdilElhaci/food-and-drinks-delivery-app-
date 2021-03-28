@@ -15,7 +15,6 @@ class _DashBoardState extends State<DashBoard> {
   @override
   void initState() {
     super.initState();
-    call.getFoodList();
   }
 
   @override
@@ -67,17 +66,29 @@ class _DashBoardState extends State<DashBoard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
-                            onTap: () {
-                              Navigator.push(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ProductsPage()),
-                              );
-                            },
-                            child: buildStackOrder(
-                                'assets/images/drinks.png', 'Drinks')),
-                        buildStackOrder(
-                            'assets/images/fast-food.png', 'Fast Food'),
+                                    builder: (context) =>
+                                        ProductsPage(category: 'drink')),
+                                (route) => false);
+                          },
+                          child: buildStackOrder(
+                              'assets/images/drinks.png', 'Drinks'),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProductsPage(category: 'fast_food')),
+                                (route) => false);
+                          },
+                          child: buildStackOrder(
+                              'assets/images/fast-food.png', 'Fast Food'),
+                        ),
                       ],
                     ),
                   ),
@@ -88,9 +99,29 @@ class _DashBoardState extends State<DashBoard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      buildStackOrder('assets/images/dessert.png', 'Dessert'),
-                      buildStackOrder(
-                          'assets/images/breakfast.png', 'Breakfast'),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProductsPage(category: 'dessert')),
+                                (route) => false);
+                          },
+                          child: buildStackOrder(
+                              'assets/images/dessert.png', 'Dessert')),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProductsPage(category: 'breakfast')),
+                              (route) => false);
+                        },
+                        child: buildStackOrder(
+                            'assets/images/breakfast.png', 'Breakfast'),
+                      ),
                     ],
                   ),
                 ),
@@ -100,7 +131,17 @@ class _DashBoardState extends State<DashBoard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      buildStackOrder('assets/images/meat.png', 'Meat'),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProductsPage(category: 'meat')),
+                                (route) => false);
+                          },
+                          child: buildStackOrder(
+                              'assets/images/meat.png', 'Meat')),
                     ],
                   ),
                 ),

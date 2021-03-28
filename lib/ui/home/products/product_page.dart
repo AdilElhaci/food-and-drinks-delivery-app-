@@ -1,11 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fooddeliveryapp/core/constants/asset-files-url.dart';
 import 'package:fooddeliveryapp/core/model/foodmodel.dart';
+import 'package:fooddeliveryapp/core/model/order.dart';
+import 'package:fooddeliveryapp/core/model/user.dart';
 import 'package:fooddeliveryapp/core/service/firebase_service/firebase_auth.dart';
+import 'package:fooddeliveryapp/ui/home/home/home.dart';
+import 'package:fooddeliveryapp/ui/home/mycard/mycard.dart';
 import 'package:kartal/kartal.dart';
 
 class ProductsPage extends StatefulWidget {
-  ProductsPage({Key key}) : super(key: key);
+  final String category;
+  ProductsPage({Key key, this.category}) : super(key: key);
 
   @override
   _ProductsPageState createState() => _ProductsPageState();
@@ -13,12 +19,15 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   FirBaseServices call = FirBaseServices();
+  UserModel userModel = UserModel();
   List<FoodModel> list = [];
-
+  List<Order> requiredList = [];
+  Future<UserModel> getUser() async => userModel = await call.getUserData();
   @override
   void initState() {
     super.initState();
-    getListFood();
+    getUser();
+    getListFood(widget.category);
   }
 
   @override
@@ -27,88 +36,199 @@ class _ProductsPageState extends State<ProductsPage> {
         resizeToAvoidBottomInset: false,
         backgroundColor: Color(0xFF5E1994),
         appBar: buildAppBarOrder(context),
-        body: FutureBuilder(
-            future: getListFood(),
-            builder: (BuildContext context, snapshot) {
-              return buildContainerBody(context);
-            }));
+        body: buildContainerBody(context));
   }
 
   Container buildContainerBody(BuildContext context) {
     return Container(
       child: Column(children: [
         Expanded(
-          //To Do For Categories
           flex: 1,
           child: Container(),
         ),
         Expanded(
           flex: 10,
-          child: ListView.separated(
-            separatorBuilder: (context, index) {
-              return Divider();
-            },
-            padding: EdgeInsets.all(10),
-            itemCount: list.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                decoration: BoxDecoration(
-                    color: Color(0xFFC4C4C4),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                height: context.dynamicHeight(0.15),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                                padding: EdgeInsets.all(10),
-                                child: Image.asset(list[index].imgUrl))
-                          ],
-                        ),
-                        Container(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  list[index].name,
-                                  style: context.textTheme.headline6,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  list[index].content,
-                                  style: context.textTheme.headline5
-                                      .copyWith(fontSize: 15),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(list[index].restaurantName),
-                              ],
-                            )),
-                        Container(
-                            margin: EdgeInsets.only(left: 100, top: 20),
-                            child: Column(
-                                mainAxisSize: MainAxisSize.min,
+          child: Container(
+            child: ListView.separated(
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              padding: EdgeInsets.all(10),
+              itemCount: list.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xFFC4C4C4),
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  height: context.dynamicHeight(0.18),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  width: 80,
+                                  height: 80,
+                                  child: Image.network(list[index].imgUrl))
+                            ],
+                          ),
+                          Container(
+                              padding: EdgeInsets.only(left: 30),
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(list[index].content,
-                                      style: context.textTheme.headline6),
-                                  IconButton(
-                                      icon: Image.asset(
-                                          ImageAndIconsUrl.cardIcon),
-                                      onPressed: () {})
-                                ]))
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
+                                  Container(
+                                    width: 120,
+                                    child: Text(
+                                      list[index].name,
+                                      style: context.textTheme.headline5
+                                          .copyWith(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    list[index].content,
+                                    style: context.textTheme.headline5
+                                        .copyWith(fontSize: 15),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    list[index].restaurantName,
+                                    style: context.textTheme.headline5.copyWith(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              )),
+                          Container(
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                Container(
+                                    padding: EdgeInsets.only(left: 60, top: 20),
+                                    child: Row(children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 10, top: 5),
+                                        child: Text(
+                                            list[index].price.toString() +
+                                                ' TL',
+                                            style: context.textTheme.headline5),
+                                      ),
+                                    ])),
+                                Container(
+                                  padding: EdgeInsets.only(left: 30, top: 30),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          icon: Icon(
+                                            Icons.remove,
+                                            size: 20,
+                                          ),
+                                          onPressed: () {
+                                            if (list[index].obje.number >= 0) {
+                                              list[index].obje.setNumber(
+                                                  list[index].obje.number - 1);
+
+                                              setState(() {});
+                                            }
+
+                                            int indexNumber;
+                                            bool con = false;
+                                            Order order = Order();
+                                            order.foodId = list[index].id;
+                                            order.orderStatus = 'ordered';
+                                            order.ordered = 1;
+                                            order.userId = userModel.id;
+                                            for (int i = 0;
+                                                i < requiredList.length;
+                                                i++) {
+                                              if (order.foodId.contains(
+                                                  requiredList[i].foodId)) {
+                                                con = true;
+                                                indexNumber = i;
+                                              }
+                                            }
+                                            if (con == true) {
+                                              if (requiredList[indexNumber]
+                                                      .ordered >=
+                                                  1) {
+                                                requiredList[indexNumber]
+                                                    .ordered--;
+                                              }
+                                            } else {
+                                              requiredList.add(order);
+                                            }
+                                            for (var item in requiredList) {
+                                              print(item.foodId);
+                                              print(item.ordered);
+                                            }
+                                          }),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        list[index].obje.number.toString(),
+                                        style: context.textTheme.headline5,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      IconButton(
+                                          icon: Icon(
+                                            Icons.add,
+                                            size: 20,
+                                          ),
+                                          onPressed: () {
+                                            list[index].obje.setNumber(
+                                                list[index].obje.number + 1);
+                                            setState(() {});
+                                            int indexNumber;
+                                            bool con = false;
+                                            Order order = Order();
+                                            order.foodId = list[index].id;
+                                            order.orderStatus = 'ordered';
+                                            order.ordered = 1;
+                                            order.userId = userModel.id;
+                                            for (int i = 0;
+                                                i < requiredList.length;
+                                                i++) {
+                                              if (order.foodId.contains(
+                                                  requiredList[i].foodId)) {
+                                                con = true;
+                                                indexNumber = i;
+                                              }
+                                            }
+                                            if (con == true) {
+                                              requiredList[indexNumber]
+                                                  .ordered++;
+                                            } else {
+                                              requiredList.add(order);
+                                            }
+                                            for (var item in requiredList) {
+                                              print(item.foodId);
+                                              print(item.ordered);
+                                            }
+                                          }),
+                                    ],
+                                  ),
+                                )
+                              ]))
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
         Expanded(
@@ -130,7 +250,13 @@ class _ProductsPageState extends State<ProductsPage> {
                           borderRadius: context.highBorderRadius,
                         ))),
                     onPressed: () {
-                      Navigator.pop(context);
+                      call.getUserData().then((value) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Home(userModel: value)),
+                            (route) => false);
+                      });
                     },
                     child: Text(
                       'Back',
@@ -150,7 +276,15 @@ class _ProductsPageState extends State<ProductsPage> {
                                 RoundedRectangleBorder(
                           borderRadius: context.highBorderRadius,
                         ))),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyCard(
+                                    v: true,
+                                  )),
+                          (route) => false);
+                    },
                     child: Container(
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -188,20 +322,14 @@ class _ProductsPageState extends State<ProductsPage> {
               context.textTheme.headline5.copyWith(fontWeight: FontWeight.bold),
         )),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(
-                  100) //                 <--- border radius here
-              ),
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(100)),
         ),
       ),
     );
   }
 
-  Future getListFood() async {
-    list = await call.getFoodList();
-
-    setState(() {
-      print(list.length);
-    });
+  Future getListFood(String category) async {
+    list = await call.getFoodList(category);
+    setState(() {});
   }
 }

@@ -16,6 +16,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _pageState = true;
@@ -24,6 +29,7 @@ class _LoginState extends State<Login> {
   TextEditingController _fullName = new TextEditingController();
   TextEditingController _password = new TextEditingController();
   TextEditingController _rePassword = new TextEditingController();
+  String p, rp;
 
   FirBaseServices call = FirBaseServices();
   @override
@@ -47,7 +53,7 @@ class _LoginState extends State<Login> {
               Expanded(
                 child: LogInElevatedButton(
                     color: Colors.white,
-                    title: 'Sign in',
+                    title: 'giriş yap ',
                     status: true,
                     onSelectedd: (pageState) {
                       setState(() {
@@ -60,7 +66,7 @@ class _LoginState extends State<Login> {
               Expanded(
                 child: LogInElevatedButton(
                   color: Color(0xFFC4C4C4),
-                  title: 'Sign un',
+                  title: 'üye ol',
                   status: false,
                   onSelectedd: (pageState) {
                     setState(() {
@@ -89,31 +95,30 @@ class _LoginState extends State<Login> {
                 padding: context.paddingLow,
                 decoration: BoxDecoration(
                     color: Color(0xFFC4C4C4),
-                    borderRadius: BorderRadius.all(Radius.circular(
-                            10.0) //                 <--- border radius here
-                        )),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 child: TextFormField(
+                    onChanged: (value) {
+                      _fullName.text = value;
+                    },
                     validator: (value) {
                       if (value.isEmpty || value.length < 6) {
-                        return 'invalid fullname';
+                        return 'yanlış soy isim';
                       } else {
                         return null;
                       }
                     },
                     decoration: new InputDecoration(
-                        labelText: 'Fullname', fillColor: Colors.white))),
+                        labelText: 'ad soyad', fillColor: Colors.white))),
             SizedBox(height: 30),
             Container(
                 padding: context.paddingLow,
                 decoration: BoxDecoration(
                     color: Color(0xFFC4C4C4),
-                    borderRadius: BorderRadius.all(Radius.circular(
-                            10.0) //                 <--- border radius here
-                        )),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 child: TextFormField(
                     validator: (value) {
                       if (value.isEmpty || !value.contains('@')) {
-                        return 'invalid email';
+                        return 'yanlış email';
                       } else {
                         return null;
                       }
@@ -126,20 +131,23 @@ class _LoginState extends State<Login> {
                 padding: context.paddingLow,
                 decoration: BoxDecoration(
                   color: Color(0xFFC4C4C4),
-                  borderRadius: BorderRadius.all(Radius.circular(
-                          10.0) //                 <--- border radius here
-                      ),
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
                 child: TextFormField(
+                    onChanged: (value) {
+                      _password.text = value;
+                      p = value;
+                    },
+                    obscureText: true,
                     validator: (value) {
                       if (value.isEmpty || value.length < 5) {
-                        return 'invalid password';
+                        return 'yanlış şifre';
                       } else {
                         return null;
                       }
                     },
                     decoration: new InputDecoration(
-                      labelText: 'Password',
+                      labelText: 'Şifre',
                       fillColor: Colors.white,
                     ))),
             SizedBox(height: 30),
@@ -147,23 +155,24 @@ class _LoginState extends State<Login> {
                 padding: context.paddingLow,
                 decoration: BoxDecoration(
                   color: Color(0xFFC4C4C4),
-                  borderRadius: BorderRadius.all(Radius.circular(
-                          10.0) //                 <--- border radius here
-                      ),
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
                 child: TextFormField(
+                    obscureText: true,
                     controller: _rePassword,
+                    onChanged: (value) {
+                      _rePassword.text = value;
+                      rp = value;
+                    },
                     validator: (value) {
-                      if (value.isEmpty ||
-                          value.length < 5 ||
-                          _password != _rePassword) {
-                        return 'invalid password';
+                      if (value.isEmpty || value.length < 5 || rp.contains(p)) {
+                        return 'yanlış şifre';
                       } else {
                         return null;
                       }
                     },
                     decoration: new InputDecoration(
-                      labelText: 'Repassword',
+                      labelText: 'tekrar şifre',
                       fillColor: Colors.white,
                     ))),
             SizedBox(height: 50),
@@ -184,7 +193,7 @@ class _LoginState extends State<Login> {
                   }
                 },
                 child: Text(
-                  'Sign up',
+                  'Kayıt ol',
                   style: context.textTheme.headline6,
                 ),
               ),
@@ -204,9 +213,7 @@ class _LoginState extends State<Login> {
               padding: context.paddingLow,
               decoration: BoxDecoration(
                 color: Color(0xFFC4C4C4),
-                borderRadius: BorderRadius.all(Radius.circular(
-                        10.0) //                 <--- border radius here
-                    ),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
               child: TextFormField(
                   onChanged: (value) {
@@ -216,7 +223,7 @@ class _LoginState extends State<Login> {
                   },
                   validator: (value) {
                     if (value.isEmpty || !value.contains('@')) {
-                      return 'invalid email';
+                      return 'yanlış email';
                     } else {
                       return null;
                     }
@@ -230,11 +237,10 @@ class _LoginState extends State<Login> {
               padding: context.paddingLow,
               decoration: BoxDecoration(
                 color: Color(0xFFC4C4C4),
-                borderRadius: BorderRadius.all(Radius.circular(
-                        10.0) //                 <--- border radius here
-                    ),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
               child: TextFormField(
+                  obscureText: true,
                   onChanged: (value) {
                     setState(() {
                       _password.text = value;
@@ -242,13 +248,13 @@ class _LoginState extends State<Login> {
                   },
                   validator: (value) {
                     if (value.isEmpty || value.length < 5) {
-                      return 'invalid password';
+                      return 'Yanlış şifre';
                     } else {
                       return null;
                     }
                   },
                   decoration: new InputDecoration(
-                    labelText: 'Password',
+                    labelText: 'Şifre',
                     fillColor: Colors.white,
                   ))),
           SizedBox(height: 100),
@@ -269,7 +275,7 @@ class _LoginState extends State<Login> {
                 }
               },
               child: Text(
-                'Sign in',
+                'Giriş yap',
                 style: context.textTheme.headline6,
               ),
             ),
@@ -292,7 +298,6 @@ class _LoginState extends State<Login> {
               borderRadius: context.lowBorderRadius,
             ))),
         onPressed: () {
-          //Fire_base
           Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
         },
         child: Text(
@@ -309,25 +314,25 @@ class _LoginState extends State<Login> {
             .createUserWithEmailAndPassword(
                 email: _email.text, password: _password.text)
             .catchError((msg) {
-      showFlutterToastMessage('Error' + msg, context);
+      showFlutterToastMessage('Hata' + msg, context);
     }))
         .user;
 
     if (result != null) {
-      //save data to database
       userRef.child(result.uid);
       Map userDataMap = {
         "name": _fullName.text,
         "email": _email.text,
-        "password": _fullName.text,
+        "password": _password.text,
+        "address": ' '
       };
       result.sendEmailVerification();
       userRef.child(result.uid).set(userDataMap);
 
       showFlutterToastMessage(
-          'You have been created New user account Successfully ', context);
+          'üye işlemi başarı ile gerçekleştirildi !', context);
     } else {
-      showFlutterToastMessage('new user account has not created', context);
+      showFlutterToastMessage('user oluştutururken hata oluştu', context);
     }
     setState(() {
       _pageState = !_pageState;
@@ -339,7 +344,7 @@ class _LoginState extends State<Login> {
       content: Text(message),
       duration: const Duration(seconds: 2),
       action: SnackBarAction(
-        label: 'ok',
+        label: 'Tmm',
         onPressed: () {
           Navigator.pop(context);
         },
@@ -368,7 +373,7 @@ class _LoginState extends State<Login> {
       respons = true;
     });
     if (respons == true) {
-      showFlutterToastMessage('Email or password is incorrect', context);
+      showFlutterToastMessage('Email veya şifre yanlış girildi', context);
     }
   }
 }

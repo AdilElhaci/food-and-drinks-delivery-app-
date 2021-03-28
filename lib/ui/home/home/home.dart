@@ -16,16 +16,16 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int currentTab = 0; // to keep track of active tab index
+  int currentTab = 0;
   final List<Widget> screens = [
     DashBoard(),
     ProfilePage(),
     MyOrdersPage(),
     SearchPage(),
     MyCard(),
-  ]; // to store nested tabs
+  ];
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = DashBoard(); // Our first view in viewport
+  Widget currentScreen = DashBoard();
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +35,23 @@ class _HomeState extends State<Home> {
         child: currentScreen,
         bucket: bucket,
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.home,
-          color: Color(0xFF5E1994),
+      floatingActionButton: Container(
+        width: 100,
+        height: 80,
+        child: FloatingActionButton(
+          child: Icon(
+            Icons.home,
+            size: 50,
+            color: Color(0xFF5E1994),
+          ),
+          backgroundColor: Colors.white,
+          onPressed: () {
+            setState(() {
+              currentScreen = DashBoard();
+              currentTab = 0;
+            });
+          },
         ),
-        backgroundColor: Colors.white,
-        onPressed: () {
-          setState(() {
-            currentScreen =
-                DashBoard(); // if user taps on this dashboard tab will be active
-            currentTab = 0;
-          });
-        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -86,7 +90,7 @@ class _HomeState extends State<Home> {
                               setState(() {
                                 currentScreen = ProfilePage(
                                   userModel: widget.userModel,
-                                ); // if user taps on this dashboard tab will be active
+                                );
                                 currentTab = 1;
                               });
                             },
@@ -99,8 +103,7 @@ class _HomeState extends State<Home> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            currentScreen =
-                                MyOrdersPage(); // if user taps on this dashboard tab will be active
+                            currentScreen = MyOrdersPage();
                             currentTab = 2;
                           });
                         },
@@ -114,7 +117,6 @@ class _HomeState extends State<Home> {
                                   ? Color(0xFF5E1994)
                                   : Colors.grey,
                             ),
-                            tooltip: 'Closes application',
                             onPressed: null,
                           ),
                         ),
@@ -123,9 +125,6 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-
-              //sağdaki buttonlar bulundugu widget
-
               Expanded(
                 flex: 1,
                 child: Row(
@@ -137,8 +136,7 @@ class _HomeState extends State<Home> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            currentScreen =
-                                SearchPage(); // if user taps on this dashboard tab will be active
+                            currentScreen = SearchPage();
                             currentTab = 3;
                           });
                         },
@@ -152,11 +150,9 @@ class _HomeState extends State<Home> {
                                   ? Color(0xFF5E1994)
                                   : Colors.grey,
                             ),
-                            tooltip: 'Closes application',
                             onPressed: () {
                               setState(() {
-                                currentScreen =
-                                    SearchPage(); // if user taps on this dashboard tab will be active
+                                currentScreen = SearchPage();
                                 currentTab = 3;
                               });
                             },
@@ -169,8 +165,9 @@ class _HomeState extends State<Home> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            currentScreen =
-                                MyCard(); // if user taps on this dashboard tab will be active
+                            currentScreen = MyCard(
+                              v: false,
+                            );
                             currentTab = 4;
                           });
                         },
@@ -184,11 +181,11 @@ class _HomeState extends State<Home> {
                                   ? Color(0xFF5E1994)
                                   : Colors.grey,
                             ),
-                            tooltip: 'Closes application',
                             onPressed: () {
                               setState(() {
-                                currentScreen =
-                                    MyCard(); // if user taps on this dashboard tab will be active
+                                currentScreen = MyCard(
+                                  v: false,
+                                );
                                 currentTab = 4;
                               });
                             },

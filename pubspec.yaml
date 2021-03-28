@@ -24,10 +24,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  firebase_database: ^3.0.7
-  firebase_auth: ^0.16.0
+  firebase_database: ^6.1.1
+  firebase_auth: ^1.0.1
   fluttertoast: ^7.1.8
-
+  firebase_core: ^1.0.2
  
   
 

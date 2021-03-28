@@ -1,11 +1,14 @@
+import 'package:fooddeliveryapp/core/model/features.dart';
+
 class FoodModel {
   String category;
   String content;
   String id;
   String imgUrl;
   String name;
-  String price;
+  int price;
   String restaurantName;
+  FoodFeatures obje;
 
   FoodModel(
       {this.category,
@@ -14,7 +17,8 @@ class FoodModel {
       this.imgUrl,
       this.name,
       this.price,
-      this.restaurantName});
+      this.restaurantName,
+      this.obje});
 
   FoodModel.fromJson(Map<String, dynamic> json) {
     category = json['category'];

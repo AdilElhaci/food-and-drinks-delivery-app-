@@ -14,7 +14,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String password;
+  String password = '';
   String address;
   String _pageTitle = 'profile';
   String _currentpassword;
@@ -73,10 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 .copyWith(fontWeight: FontWeight.bold),
           )),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(
-                    100) //                 <--- border radius here
-                ),
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(100)),
           ),
         ),
       ),
@@ -99,9 +96,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                    10.0) //                 <--- border radius here
-                                )),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: TextFormField(
                           initialValue: widget.userModel.name,
                           readOnly: true,
@@ -118,9 +114,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                    10.0) //                 <--- border radius here
-                                )),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: TextFormField(
                             initialValue: widget.userModel.address,
                             onChanged: (val) {
@@ -149,9 +144,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                    10.0) //                 <--- border radius here
-                                )),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: TextFormField(
                             initialValue: widget.userModel.address,
                             onChanged: (val) {

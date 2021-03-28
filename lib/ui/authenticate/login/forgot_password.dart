@@ -43,7 +43,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 child: ListView(
                   children: [
                     Text(
-                      'Forgot Password'.toUpperCase(),
+                      'şifre unuttum'.toUpperCase(),
                       style: context.textTheme.headline4.copyWith(
                           fontWeight: FontWeight.bold, color: Colors.black),
                       textAlign: TextAlign.center,
@@ -68,7 +68,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         child: TextFormField(
                             validator: (value) {
                               if (value.isEmpty || !value.contains('@')) {
-                                return 'Text is empty or invalid';
+                                return 'yanlış giriş';
                               }
                               return null;
                             },
@@ -76,7 +76,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                                hintText: "Enter you Email",
+                                hintText: "email giriniz",
                                 hintStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 1.8),
@@ -123,7 +123,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     offset: Offset(2, 2))
                               ]),
                           child: Text(
-                            "Confirm",
+                            "onayla",
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
@@ -158,7 +158,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     offset: Offset(2, 2))
                               ]),
                           child: Text(
-                            "Go back",
+                            "Geri",
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
@@ -178,44 +178,36 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   Future resetPassword(String email, BuildContext contex) async {
-    var result = _firebaseAuth.sendPasswordResetEmail(email: email);
-    result.then((value) => () {}).catchError((onError) {
-      done(contex, onError);
+    await _firebaseAuth
+        .sendPasswordResetEmail(email: email)
+        .then((value) => {done(context, 'İşlem başarı ile gerçeklerşitirildi')})
+        .onError((error, stackrace) {
+      done(context,
+          'İşlem gerçekleştirirken bir hata olustu lutfen bilgilerinizi kontrol edin');
     });
-    if (result != null) {
-      result.whenComplete(
-          () => {done(context, 'Your process has been done successfully')});
-    }
-  }
-
-  showFlutterToastMessage(String message, BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: const Text('snack'),
-      duration: const Duration(seconds: 1),
-      action: SnackBarAction(
-        label: 'ACTION',
-        onPressed: () {},
-      ),
-    ));
   }
 
   done(BuildContext contex, String mes) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
-          title: new Text("Message"),
+          title: new Text("messaj"),
           content: new Text(mes),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new TextButton(
-              child: new Text("Go to Login page"),
+            TextButton(
+              child: Text("Giriş sayfasına git"),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Login()),
                 );
+              },
+            ),
+            TextButton(
+              child: Text("iptal"),
+              onPressed: () {
+                Navigator.pop(context);
               },
             ),
           ],
