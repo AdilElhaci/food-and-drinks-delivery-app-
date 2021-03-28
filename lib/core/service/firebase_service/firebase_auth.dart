@@ -95,6 +95,7 @@ class FirBaseServices {
           food.price = values[key]['price'];
           food.restaurantName = values[key]['restaurant_name'];
           foodFeactures.setId(values[key]['id']);
+          foodFeactures.setPrice(values[key]['price']);
           foodFeactures.setNumber(0);
           food.obje = foodFeactures;
           list.add(food);
@@ -122,6 +123,7 @@ class FirBaseServices {
         food.restaurantName = values[key]['restaurant_name'];
         foodFeactures.setId(values[key]['id']);
         foodFeactures.setNumber(0);
+        foodFeactures.setPrice(values[key]['price']);
         food.obje = foodFeactures;
         list.add(food);
       }

@@ -40,6 +40,8 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   Container buildContainerBody(BuildContext context) {
+    String _cardTitle = 'Alisverisi tamamla';
+    int _sum = 0;
     return Container(
       child: Column(children: [
         Expanded(
@@ -139,37 +141,38 @@ class _ProductsPageState extends State<ProductsPage> {
                                                   list[index].obje.number - 1);
 
                                               setState(() {});
-                                            }
-
-                                            int indexNumber;
-                                            bool con = false;
-                                            Order order = Order();
-                                            order.foodId = list[index].id;
-                                            order.orderStatus = 'ordered';
-                                            order.ordered = 1;
-                                            order.userId = userModel.id;
-                                            for (int i = 0;
-                                                i < requiredList.length;
-                                                i++) {
-                                              if (order.foodId.contains(
-                                                  requiredList[i].foodId)) {
-                                                con = true;
-                                                indexNumber = i;
+                                              int indexNumber;
+                                              bool con = false;
+                                              Order order = Order();
+                                              order.foodId = list[index].id;
+                                              order.foodImage =
+                                                  list[index].imgUrl;
+                                              order.orderStatus = 'ordered';
+                                              order.ordered = 1;
+                                              order.userId = userModel.id;
+                                              for (int i = 0;
+                                                  i < requiredList.length;
+                                                  i++) {
+                                                if (order.foodId.contains(
+                                                    requiredList[i].foodId)) {
+                                                  con = true;
+                                                  indexNumber = i;
+                                                }
                                               }
-                                            }
-                                            if (con == true) {
-                                              if (requiredList[indexNumber]
-                                                      .ordered >=
-                                                  1) {
-                                                requiredList[indexNumber]
-                                                    .ordered--;
+                                              if (con == true) {
+                                                if (requiredList[indexNumber]
+                                                        .ordered >
+                                                    1) {
+                                                  requiredList[indexNumber]
+                                                      .ordered--;
+                                                }
+                                              } else {
+                                                requiredList.add(order);
                                               }
-                                            } else {
-                                              requiredList.add(order);
-                                            }
-                                            for (var item in requiredList) {
-                                              print(item.foodId);
-                                              print(item.ordered);
+                                              for (var item in requiredList) {
+                                                print(item.foodId);
+                                                print(item.ordered);
+                                              }
                                             }
                                           }),
                                       SizedBox(
@@ -195,9 +198,13 @@ class _ProductsPageState extends State<ProductsPage> {
                                             bool con = false;
                                             Order order = Order();
                                             order.foodId = list[index].id;
+                                            order.foodImage =
+                                                list[index].imgUrl;
+
                                             order.orderStatus = 'ordered';
                                             order.ordered = 1;
                                             order.userId = userModel.id;
+
                                             for (int i = 0;
                                                 i < requiredList.length;
                                                 i++) {
@@ -289,11 +296,27 @@ class _ProductsPageState extends State<ProductsPage> {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset(ImageAndIconsUrl.cardIcon),
-                            Text(
-                              'Go to My card',
-                              style: context.textTheme.headline6
-                                  .copyWith(fontSize: 14),
+                            Expanded(
+                                flex: 1,
+                                child: Image.asset(ImageAndIconsUrl.cardIcon)),
+                            Expanded(
+                              flex: 2,
+                              child: TextButton(
+                                child: Text(
+                                  _cardTitle,
+                                  style: context.textTheme.headline6
+                                      .copyWith(fontSize: 14),
+                                ),
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MyCard(
+                                                requiredList: requiredList,
+                                              )),
+                                      (route) => false);
+                                },
+                              ),
                             ),
                           ]),
                     ),

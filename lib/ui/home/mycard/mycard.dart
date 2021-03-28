@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:fooddeliveryapp/core/model/order.dart';
 import 'package:fooddeliveryapp/core/model/user.dart';
 import 'package:fooddeliveryapp/core/service/firebase_service/firebase_auth.dart';
 import 'package:fooddeliveryapp/ui/home/home/home.dart';
 import 'package:kartal/kartal.dart';
 
 class MyCard extends StatefulWidget {
+  List<Order> requiredList;
   final bool v;
 
-  const MyCard({Key key, this.v}) : super(key: key);
+  MyCard({Key key, this.v, this.requiredList}) : super(key: key);
   @override
   _MyCardState createState() => _MyCardState();
 }
 
 class _MyCardState extends State<MyCard> {
   FirBaseServices call = FirBaseServices();
+  List<Order> itemlist = [];
   bool _state;
   @override
   void initState() {
     super.initState();
     _state = widget.v;
+    itemlist = widget.requiredList;
   }
 
   @override
@@ -54,100 +58,87 @@ class _MyCardState extends State<MyCard> {
           Expanded(
             flex: 9,
             child: Container(
-              child: ListView.separated(
-                separatorBuilder: (context, index) {
-                  return Divider();
-                },
-                padding: EdgeInsets.all(20),
-                itemCount: 4,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xFFC4C4C4),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    height: context.dynamicHeight(0.18),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Column(
-                              children: [
-                                Container(
-                                    padding: EdgeInsets.all(20),
-                                    child:
-                                        Image.asset('assets/images/cola.png'))
-                              ],
-                            ),
-                            Container(
-                                padding: EdgeInsets.only(top: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'data',
-                                      style: context.textTheme.headline6,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      '300ml',
-                                      style: context.textTheme.headline5
-                                          .copyWith(fontSize: 15),
-                                    ),
-                                  ],
-                                )),
-                            Container(
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
+              child: itemlist == null
+                  ? Center(
+                      child: Text(
+                        'sepet bos',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )
+                  : ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return Divider();
+                      },
+                      padding: EdgeInsets.all(20),
+                      itemCount: itemlist.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 20, right: 10),
+                          decoration: BoxDecoration(
+                              color: Color(0xFFC4C4C4),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          height: context.dynamicHeight(0.18),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                      width: 150,
+                                      height: 100,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                      child: Image.network(
+                                          itemlist[index].foodImage)),
                                   Container(
                                       padding:
-                                          EdgeInsets.only(left: 110, top: 40),
-                                      child: Text("4 TL",
-                                          style: context.textTheme.headline6)),
+                                          EdgeInsets.only(top: 20, right: 20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'data',
+                                            style: context.textTheme.headline6
+                                                .copyWith(fontSize: 25),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            '300ml',
+                                            style: context.textTheme.headline5
+                                                .copyWith(fontSize: 18),
+                                          ),
+                                        ],
+                                      )),
                                   Container(
-                                    padding: EdgeInsets.only(left: 70, top: 20),
-                                    child: Row(
-                                      children: [
-                                        IconButton(
-                                            icon: Icon(
-                                              Icons.remove,
-                                              size: 30,
-                                            ),
-                                            onPressed: () {
-                                              print('object');
-                                            }),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          '3',
-                                          style: context.textTheme.headline5,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        IconButton(
-                                            icon: Icon(
-                                              Icons.add,
-                                              size: 30,
-                                            ),
-                                            onPressed: () {
-                                              print('object');
-                                            }),
-                                      ],
-                                    ),
-                                  )
-                                ]))
-                          ],
-                        ),
-                      ],
+                                    padding:
+                                        EdgeInsets.only(left: 10, right: 20),
+                                    child: Column(children: [
+                                      IconButton(
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: Colors.red.shade300,
+                                          ),
+                                          onPressed: () {
+                                            itemlist.removeAt(index);
+                                            setState(() {});
+                                          }),
+                                      Text(itemlist[index].ordered.toString(),
+                                          style: context.textTheme.headline6),
+                                    ]),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ),
           Expanded(
