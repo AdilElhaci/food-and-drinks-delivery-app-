@@ -3,10 +3,11 @@ import 'package:fooddeliveryapp/core/model/order.dart';
 import 'package:fooddeliveryapp/core/model/user.dart';
 import 'package:fooddeliveryapp/core/service/firebase_service/firebase_auth.dart';
 import 'package:fooddeliveryapp/ui/home/home/home.dart';
+import 'package:fooddeliveryapp/ui/home/orders/orders.dart';
 import 'package:kartal/kartal.dart';
 
 class MyCard extends StatefulWidget {
-  List<Order> requiredList;
+  final List<Order> requiredList;
   final bool v;
 
   MyCard({Key key, this.v, this.requiredList}) : super(key: key);
@@ -17,12 +18,21 @@ class MyCard extends StatefulWidget {
 class _MyCardState extends State<MyCard> {
   FirBaseServices call = FirBaseServices();
   List<Order> itemlist = [];
+  int toplam = 0;
   bool _state;
   @override
   void initState() {
     super.initState();
     _state = widget.v;
     itemlist = widget.requiredList;
+    toplamvalue();
+  }
+
+  Future<void> toplamvalue() async {
+    for (var item in itemlist) {
+      toplam += item.price;
+      print(toplam);
+    }
   }
 
   @override
@@ -125,7 +135,9 @@ class _MyCardState extends State<MyCard> {
                                             color: Colors.red.shade300,
                                           ),
                                           onPressed: () {
+                                            toplam -= itemlist[index].price;
                                             itemlist.removeAt(index);
+
                                             setState(() {});
                                           }),
                                       Text(itemlist[index].ordered.toString(),
@@ -166,7 +178,7 @@ class _MyCardState extends State<MyCard> {
                       child: Container(
                         padding: EdgeInsets.only(top: 10, right: 15),
                         child: Text(
-                          'Total: ' + '15',
+                          'topam: ' + toplam.toString(),
                           style: context.textTheme.headline6,
                         ),
                       ),
@@ -184,9 +196,14 @@ class _MyCardState extends State<MyCard> {
                                   RoundedRectangleBorder(
                             borderRadius: context.highBorderRadius,
                           ))),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await call.postItemList(itemlist);
+                        itemlist.clear();
+                        setState(() {});
+                        _showMyDialog();
+                      },
                       child: Text(
-                        'order',
+                        'onayla',
                         style: context.textTheme.headline5,
                       ),
                     ),
@@ -215,7 +232,7 @@ class _MyCardState extends State<MyCard> {
                                   (route) => false);
                             },
                             child: Text(
-                              'go to home ',
+                              'Ana sayfaya git ',
                               style: context.textTheme.headline5,
                             ),
                           ),
@@ -224,5 +241,44 @@ class _MyCardState extends State<MyCard> {
                 ],
               ))
         ])));
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Onay mesajı'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                      'Siparişinizi onaylandı durumunu öğrenebilmek için lutfen siparişlerim sayfasına gidin '),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text('siparişlerim sayfasına git'),
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyOrdersPage(
+                                v: true,
+                              )),
+                      (route) => false);
+                },
+              ),
+              ElevatedButton(
+                child: Text('geri'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 }

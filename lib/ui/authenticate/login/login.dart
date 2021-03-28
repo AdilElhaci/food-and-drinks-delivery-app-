@@ -16,6 +16,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  FirBaseServices call = FirBaseServices();
+  UserModel userModel = UserModel();
+
   @override
   void initState() {
     super.initState();
@@ -24,14 +27,13 @@ class _LoginState extends State<Login> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _pageState = true;
-  UserModel userModel = UserModel();
+
   TextEditingController _email = new TextEditingController();
   TextEditingController _fullName = new TextEditingController();
   TextEditingController _password = new TextEditingController();
   TextEditingController _rePassword = new TextEditingController();
   String p, rp;
 
-  FirBaseServices call = FirBaseServices();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

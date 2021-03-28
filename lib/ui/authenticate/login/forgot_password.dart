@@ -181,10 +181,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     await _firebaseAuth
         .sendPasswordResetEmail(email: email)
         .then((value) => {done(context, 'İşlem başarı ile gerçeklerşitirildi')})
-        .onError((error, stackrace) {
-      done(context,
-          'İşlem gerçekleştirirken bir hata olustu lutfen bilgilerinizi kontrol edin');
-    });
+        .onError((error, stackrace) => done(context,
+            'İşlem gerçekleştirirken bir hata olustu lutfen bilgilerinizi kontrol edin'));
   }
 
   done(BuildContext contex, String mes) {

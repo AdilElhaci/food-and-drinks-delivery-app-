@@ -1,9 +1,10 @@
 import 'dart:collection';
-
+import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fooddeliveryapp/core/model/features.dart';
 import 'package:fooddeliveryapp/core/model/foodmodel.dart';
+import 'package:fooddeliveryapp/core/model/order.dart';
 import 'package:fooddeliveryapp/core/model/user.dart';
 
 class FirBaseServices {
@@ -11,6 +12,7 @@ class FirBaseServices {
   UserModel userModel = UserModel();
   final dbUser = FirebaseDatabase.instance.reference().child("users");
   final dbFood = FirebaseDatabase.instance.reference().child("foods");
+  final dbOrders = FirebaseDatabase.instance.reference().child("orders");
 
   Future<UserModel> signInSubmit(String email, String password) async {
     var result = await FirebaseAuth.instance
@@ -126,6 +128,47 @@ class FirBaseServices {
         foodFeactures.setPrice(values[key]['price']);
         food.obje = foodFeactures;
         list.add(food);
+      }
+    });
+
+    return list;
+  }
+
+  Future<void> postItemList(List<Order> itemlist) async {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(now);
+    print(formatted);
+    for (var item in itemlist) {
+      dbOrders.child(formatted).set({
+        'food_id': item.foodId,
+        'order_status': item.orderStatus,
+        'ordered': item.ordered,
+        'order_image': item.foodImage,
+        'price': item.price,
+        'resturant_name': item.returantName,
+        'user_id': item.userId
+      });
+    }
+  }
+
+  Future<List<Order>> getAllOrderList() async {
+    List<Order> list = [];
+    await dbOrders.once().then((DataSnapshot snapshot) {
+      var keys = snapshot.value.keys;
+      var values = snapshot.value;
+      for (var key in keys) {
+        Order order = new Order();
+        order.id = key;
+        order.foodId = values[key]['food_id'];
+        order.orderStatus = values[key]['order_status'];
+        order.foodImage = values[key]['order_image'];
+        order.ordered = values[key]['ordered'];
+        order.price = values[key]['price'];
+        order.userId = values[key]['user_id'];
+        order.returantName = values[key]['resturant_name'];
+
+        list.add(order);
       }
     });
 

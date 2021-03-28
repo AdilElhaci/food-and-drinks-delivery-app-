@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fooddeliveryapp/ui/authenticate/login/check_auth.dart';
 import 'package:fooddeliveryapp/ui/authenticate/login/forgot_password.dart';
 import 'package:fooddeliveryapp/ui/authenticate/login/login.dart';
 import 'package:fooddeliveryapp/ui/home/home/home.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/profile': (context) => ProfilePage(),
         '/login': (context) => Login(),
-        '/': (context) => Login(),
+        '/': (context) => CheckAuth(),
         '/product': (context) => ProductsPage(),
         '/home': (context) => Home(),
         '/forgotpassword': (context) => ForgotPassword(),

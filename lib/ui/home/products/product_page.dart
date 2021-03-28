@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fooddeliveryapp/core/constants/asset-files-url.dart';
 import 'package:fooddeliveryapp/core/model/foodmodel.dart';
@@ -27,6 +26,7 @@ class _ProductsPageState extends State<ProductsPage> {
   void initState() {
     super.initState();
     getUser();
+
     getListFood(widget.category);
   }
 
@@ -41,7 +41,6 @@ class _ProductsPageState extends State<ProductsPage> {
 
   Container buildContainerBody(BuildContext context) {
     String _cardTitle = 'Alisverisi tamamla';
-    int _sum = 0;
     return Container(
       child: Column(children: [
         Expanded(
@@ -150,6 +149,10 @@ class _ProductsPageState extends State<ProductsPage> {
                                               order.orderStatus = 'ordered';
                                               order.ordered = 1;
                                               order.userId = userModel.id;
+                                              order.returantName =
+                                                  list[index].restaurantName;
+
+                                              order.price = list[index].price;
                                               for (int i = 0;
                                                   i < requiredList.length;
                                                   i++) {
@@ -168,10 +171,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                                 }
                                               } else {
                                                 requiredList.add(order);
-                                              }
-                                              for (var item in requiredList) {
-                                                print(item.foodId);
-                                                print(item.ordered);
                                               }
                                             }
                                           }),
@@ -204,7 +203,9 @@ class _ProductsPageState extends State<ProductsPage> {
                                             order.orderStatus = 'ordered';
                                             order.ordered = 1;
                                             order.userId = userModel.id;
-
+                                            order.price = list[index].price;
+                                            order.returantName =
+                                                list[index].restaurantName;
                                             for (int i = 0;
                                                 i < requiredList.length;
                                                 i++) {
@@ -219,10 +220,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                                   .ordered++;
                                             } else {
                                               requiredList.add(order);
-                                            }
-                                            for (var item in requiredList) {
-                                              print(item.foodId);
-                                              print(item.ordered);
                                             }
                                           }),
                                     ],
@@ -313,6 +310,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                       MaterialPageRoute(
                                           builder: (context) => MyCard(
                                                 requiredList: requiredList,
+                                                v: true,
                                               )),
                                       (route) => false);
                                 },

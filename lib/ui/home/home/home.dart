@@ -103,7 +103,9 @@ class _HomeState extends State<Home> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            currentScreen = MyOrdersPage();
+                            currentScreen = MyOrdersPage(
+                              v: false,
+                            );
                             currentTab = 2;
                           });
                         },
