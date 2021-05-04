@@ -20,13 +20,10 @@ class _SearchPageState extends State<SearchPage> {
   FirBaseServices call = FirBaseServices();
   List<FoodModel> dataList = [];
   String str;
-
   int _number;
-
   @override
   void initState() {
     _number = 0;
-
     super.initState();
     getListFood();
   }
@@ -58,9 +55,7 @@ class _SearchPageState extends State<SearchPage> {
               itemCount: dataList != null ? dataList.length : 0,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xFFC4C4C4),
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  decoration: BoxDecoration(color: Color(0xFFC4C4C4), borderRadius: BorderRadius.all(Radius.circular(10))),
                   height: context.dynamicHeight(0.18),
                   child: Column(
                     children: [
@@ -68,11 +63,7 @@ class _SearchPageState extends State<SearchPage> {
                         children: [
                           Column(
                             children: [
-                              Container(
-                                  padding: EdgeInsets.only(left: 10),
-                                  width: 80,
-                                  height: 80,
-                                  child: Image.network(dataList[index].imgUrl))
+                              Container(padding: EdgeInsets.only(left: 10), width: 80, height: 80, child: Image.network(dataList[index].imgUrl))
                             ],
                           ),
                           Container(
@@ -84,10 +75,7 @@ class _SearchPageState extends State<SearchPage> {
                                     width: 120,
                                     child: Text(
                                       dataList[index].name,
-                                      style: context.textTheme.headline5
-                                          .copyWith(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                      style: context.textTheme.headline5.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   SizedBox(
@@ -95,69 +83,61 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                   Text(
                                     dataList[index].content,
-                                    style: context.textTheme.headline5
-                                        .copyWith(fontSize: 15),
+                                    style: context.textTheme.headline5.copyWith(fontSize: 15),
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
                                   Text(
                                     dataList[index].restaurantName,
-                                    style: context.textTheme.headline5.copyWith(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                    style: context.textTheme.headline5.copyWith(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               )),
                           Container(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                Container(
-                                    padding: EdgeInsets.only(left: 60, top: 40),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 10,
-                                      ),
-                                      child: Text(
-                                          dataList[index].price.toString() +
-                                              'TL',
-                                          style: context.textTheme.headline5),
-                                    )),
-                                Container(
-                                  padding: EdgeInsets.only(left: 30, top: 30),
-                                  child: Row(
-                                    children: [
-                                      IconButton(
-                                          icon: Icon(
-                                            Icons.remove,
-                                            size: 20,
-                                          ),
-                                          onPressed: () {
-                                            remove();
-                                          }),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        _number.toString(),
-                                        style: context.textTheme.headline5,
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      IconButton(
-                                          icon: Icon(
-                                            Icons.add,
-                                            size: 20,
-                                          ),
-                                          onPressed: () {
-                                            add();
-                                          }),
-                                    ],
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Container(
+                                padding: EdgeInsets.only(left: 60, top: 40),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 10,
                                   ),
-                                )
-                              ]))
+                                  child: Text(dataList[index].price.toString() + 'TL', style: context.textTheme.headline5),
+                                )),
+                            Container(
+                              padding: EdgeInsets.only(left: 30, top: 30),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.remove,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        remove();
+                                      }),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    _number.toString(),
+                                    style: context.textTheme.headline5,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.add,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        add();
+                                      }),
+                                ],
+                              ),
+                            )
+                          ]))
                         ],
                       ),
                     ],
@@ -217,8 +197,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void searchMethod(String str) {
-    DatabaseReference searchRef =
-        FirebaseDatabase.instance.reference().child('foods');
+    DatabaseReference searchRef = FirebaseDatabase.instance.reference().child('foods');
     searchRef.once().then((DataSnapshot dataSnapshot) {
       dataList.clear();
       var keys = dataSnapshot.value.keys;
