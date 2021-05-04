@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -137,8 +138,12 @@ class FirBaseServices {
   Future<void> postItemList(List<Order> itemlist) async {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formatted = formatter.format(now);
-    print(formatted);
+    var rng = new Random();
+    int e = rng.nextInt(100);
+    final String formatted = formatter.format(now) + (e.toString());
+
+    dbOrders.child(formatted);
+
     for (var item in itemlist) {
       dbOrders.child(formatted).set({
         'food_id': item.foodId,
